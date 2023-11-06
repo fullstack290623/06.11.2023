@@ -134,7 +134,7 @@ app.get('/api/users', (request, response) => {
 })
 app.get('/api/users/:id', (request, response) => {
     const user_id = parseInt(request.params.id)
-    const user = response.json(get_by_id(user_id))
+    const user = get_by_id(user_id)
     if (user) { 
         response.json(user)
     }
