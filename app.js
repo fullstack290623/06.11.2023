@@ -1,5 +1,7 @@
 console.log('Hello nodejs..');
+
 let sequential_id = 8
+
 const users = [
     {
       "id": 1,
@@ -56,21 +58,48 @@ function get() {
 function get_by_id(id) {
     // search and return from the json array the record with the given id
     // if not found return { }
-
+    const the_users = users.filter(user => user.id === id)
+    return the_users.length > 0 ? the_users[0] : { };
 }
 function post(user) {
-    // insert the new user with the correct id (sequential)
+    const new_user = { ...user, id: ++sequential_id }
+    users.push(new_user)
+    return new_user
 }
 function put(id, user) {
     // if id exists then replace all fields with the given user
     // if not -- insert this user (with the correct id)
+    const filter_users = users.filter(user => user.id === id)
+    if (filter_users.length == 0) {
+        // not exist --> create and return
+        return post(user)
+    }
+    // exist --> replace
+    const index = users.indexOf(filter_users[0])
+    // if the id does not exist, use the id parameter otherwise use the user's id
+    users[index] = { id: id, ...user } // allow modify the id
 }
 function patch(id, user) {
     // if id exists then update only the fields given in the user
     // if not -- do nothing
+    const filter_users = users.filter(user => user.id === id)
+    if (filter_users.length == 0) {
+        return;
+    }
+    // exist --> replace
+    const index = users.indexOf(filter_users[0])
+    // if the id does not exist, use the id parameter otherwise use the user's id
+    users[index] = { ...users[index], ...user } // allow modify the id    
 }
 function delete_by_id(id) {
-    // if id exists then rewmove it from the array
+    // if id exists then remove it from the array
+    const filter_users = users.filter(user => user.id === id)
+    if (filter_users.length == 0) {
+        return false;
+    }
+    const index = users.indexOf(filter_users[0])
+    users.splice(index, 1)
+    return true;
 }
 
 console.log(get());
@@ -80,9 +109,9 @@ post ( {
         "username": "avi_ham",
         "email": "avi_ham@gmail.com"})
 put (10, {
-        "name": "Avi hameleh",
-        "username": "avi_ham",
-        "email": "avi_ham@gmail.com"})      
+        "name": "danny shovevani",
+        "username": "dany_shov",
+        "email": "dan_dan@gmail.com"})      
 patch (10, {
         "name": "Avi cohen",
         "username": "avi_cohen",
