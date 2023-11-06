@@ -101,7 +101,7 @@ function delete_by_id(id) {
     users.splice(index, 1)
     return true;
 }
-
+/*
 console.log(get());
 console.log(get(4));
 post ( {
@@ -119,4 +119,31 @@ patch (10, {
 console.log(get());
 delete_by_id(9)
 console.log(get_by_id(9));
+*/
+
+/* DEMO CODE !! */
+const express = require('express')
+const body_parser = require('body-parser')
+
+const app = express()
+const port = 3000
+app.use(body_parser.json())
+
+app.get('/api/users', (request, response) => {
+    response.json(get())
+})
+app.get('/api/users/:id', (request, response) => {
+    const user_id = parseInt(request.params.id)
+    const user = response.json(get_by_id(user_id))
+    if (user) { 
+        response.json(user)
+    }
+    else {
+        response.status(404).json({ "error": `cannot find user with id ${user_id}`})
+    }
+})
+
+app.listen(port, () => {
+    console.log('Express server is running ....');
+})
 
